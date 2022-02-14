@@ -1,40 +1,54 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import useToggle from '@/app/useToggle'
+import AuthCheck from '../../auth'
+import { useState } from 'react'
+import { mutate } from 'swr'
+import Url from '@/config/Url'
 export default function NavMaster({ children }) {
+  const log = AuthCheck()
   const [visible, toggle, setToggleStatus] = useToggle()
+  const [active, setActive] = useState()
   const router = useRouter()
-  const menu = [
-    {
-      path: 'cpu',
-      name: 'cpu',
-    },
-    {
-      path: 'mobo',
-      name: 'mobo',
-    },
-  ]
+  const { master } = router.query
+  const path = ['cpu', 'mobo']
+  const onClick = (data, index) => {
+    router.push(`/master/${data}`)
+    setActive(index)
+  }
   return (
     <div className='master'>
       <div className='navbar bg-neutral rounded-box mb-2 shadow-lg'>
         <div className='mx-2 flex-none px-2'>
-          <span className='text-lg font-bold' onClick={() => router.push(`/`)}>
+          <span
+            className='cursor-pointer text-lg font-bold'
+            onClick={() => router.push(`/`)}
+            onMouseEnter={() =>
+              mutate(
+                'http://192.168.55.190:5000/products',
+                fetch('http://192.168.55.190:5000/products').then((res) => res.json())
+              )
+            }>
             HOME
           </span>
         </div>
         <div className='mx-2 flex-1 px-2'>
-          <div className='hidden items-stretch lg:flex'>
-            {menu.map((data, index) => (
-              <a key={index} className='btn btn-ghost btn-sm rounded-btn' onClick={() => router.push(`/master/${data.path}`)}>
-                {data.name}
+          <div className='flex items-stretch'>
+            {path.map((data, index) => (
+              <a
+                key={index}
+                className={`${master == data && 'text-sky-400'} btn btn-ghost btn-sm rounded-btn`}
+                onClick={() => onClick(data, index)}
+                onMouseEnter={() =>
+                  mutate(
+                    `${Url}/${data}`,
+                    fetch(`${Url}/${data}`).then((res) => res.json())
+                  )
+                }>
+                {data.replace(/_/g, ' ').toUpperCase()}
               </a>
             ))}
-            <a className='btn btn-ghost btn-sm rounded-btn' onClick={() => router.push(`/master/tess`)}>
-              tes
-            </a>
-            <a className='btn btn-ghost btn-sm rounded-btn' onClick={() => router.push(`/master/tess2`)}>
-              tes2
-            </a>
+
             <button className={`btn btn-ghost btn-sm ${!visible && 'text-sky-400'}`} onClick={toggle}>
               toggle
             </button>

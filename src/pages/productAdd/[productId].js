@@ -4,19 +4,19 @@ import { useState, useEffect } from 'react'
 import EditProduct from '../../components/product/EditProduct'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import useSWR from 'swr'
+import fetcher from '@/app/fetcher'
 
 export default function ProductEdit() {
   const router = useRouter()
-  console.log(router.query)
   const { productId } = router.query
-  const [product, setProduct] = useState({
-    title: '',
-    price: '',
-  })
+  const { data, error, mutate: refresh } = useSWR(`http://192.168.55.190:5000/products/${productId}`, fetcher)
 
-  const saveProduct = async (e) => {
+  const [product, setProduct] = useState(data)
+
+  const saveProduct = (e) => {
     e.preventDefault()
-    await axios.patch(`http://192.168.55.190:5000/products/${productId}`, {
+    axios.patch(`http://192.168.55.190:5000/products/${productId}`, {
       title: product.title,
       price: product.price,
     })
@@ -36,9 +36,9 @@ export default function ProductEdit() {
     getProductById()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId])
-
+  if (!data) return ''
   return (
-    <div className='p-8 w-full md:w-1/2 mx-auto'>
+    <div className='mx-auto w-full p-8 md:w-1/2'>
       <Link href={'/'}>
         <a className='btn btn-sm btn-secondary'>Kembali</a>
       </Link>
@@ -51,7 +51,7 @@ export default function ProductEdit() {
             type='text'
             placeholder='Title'
             className='input input-primary input-bordered'
-            value={product.title}
+            value={product?.title}
             onChange={(e) => {
               setProduct({ ...product, title: e.target.value })
             }}
@@ -65,13 +65,13 @@ export default function ProductEdit() {
             type='text'
             placeholder='Price'
             className='input input-primary input-bordered'
-            value={product.price}
+            value={product?.price}
             onChange={(e) => {
               setProduct({ ...product, price: e.target.value })
             }}
           />
         </div>
-        <button className='mt-4 btn btn-primary'>Update</button>
+        <button className='btn btn-primary mt-4'>Update</button>
       </form>
     </div>
   )

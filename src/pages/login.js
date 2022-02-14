@@ -26,28 +26,28 @@ export default function Login() {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center'>
-      <div className='w-1/3 p-5 shadow-lg bg-base-200 rounded-md'>
+    <div className='flex min-h-screen items-center justify-center'>
+      <div className='bg-base-200 w-1/3 rounded-md p-5 shadow-lg'>
         <h1 className='text-primary text-lg font-bold'>INVENTARIS IT</h1>
         <h1 className='text-primary text-lg font-bold'>{msg}</h1>
         <hr className='border-base-100 my-5' />
         <form onSubmit={Auth} className='box'>
           <div className='flex flex-col gap-2'>
-            <div className='flex justify-between items-center'>
-              <label htmlFor='' className='flex-1 text-primary'>
+            <div className='flex items-center justify-between'>
+              <label htmlFor='' className='text-primary flex-1'>
                 Email
               </label>
-              <input type='text' className='w-3/4 input input-primary' value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input type='text' className='input input-primary w-3/4' value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div className='flex justify-between items-center'>
-              <label htmlFor='' className='flex-1 text-primary'>
+            <div className='flex items-center justify-between'>
+              <label htmlFor='' className='text-primary flex-1'>
                 Password
               </label>
-              <input type='text' className='w-3/4 input input-primary' value={password} onChange={(e) => setPassword(e.target.value)} />
+              <input type='text' className='input input-primary w-3/4' value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
           <Button
-            className={'w-full mt-5'}
+            className={'mt-5 w-full'}
             onClick={() => {
               console.log('Hello')
             }}>
@@ -57,12 +57,4 @@ export default function Login() {
       </div>
     </div>
   )
-}
-export async function getServerSideProps(context) {
-  const response = await axios.get('http://192.168.55.190:5000/products')
-  return {
-    props: {
-      data: response.data.products,
-    }, // will be passed to the page component as props
-  }
 }

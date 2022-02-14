@@ -1,59 +1,53 @@
-import axios from 'axios'
-import Link from 'next/link'
 import React from 'react'
+import Link from 'next/link'
+import axios from 'axios'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { mutate } from 'swr'
-export default function AddProduct() {
+export default function CpuAdd() {
   const router = useRouter()
-  const [product, setProduct] = useState({
-    title: '',
-    price: '',
-  })
+  const [Data, setData] = useState({})
 
-  const saveProduct = (e) => {
+  const saveData = (e) => {
     e.preventDefault()
-    axios
-      .post('http://192.168.55.190:5000/products', {
-        title: product.title,
-        price: product.price,
-        type: 'non organik',
-      })
-      .then(mutate())
-    router.push('/')
+    axios.post('http://192.168.55.190:5000/cpu', {
+      cpu_id: Data.cpu_id,
+      hardware_category_id: Data.hardware_category_id,
+      type: 'non organik',
+    })
+    router.push('/master/cpu')
   }
 
   return (
     <div className='mx-auto w-full p-8 md:w-1/2'>
-      <Link href={'/'}>
+      <Link href={'/master/cpu'}>
         <a className='btn btn-sm btn-secondary'>Kembali</a>
       </Link>
-      <form onSubmit={saveProduct}>
+      <form onSubmit={saveData}>
         <div className='form-control'>
           <label className='label'>
-            <span className='label-text'>Title</span>
+            <span className='label-text'>cpu_id</span>
           </label>
           <input
             type='text'
             placeholder='Title'
             className='input input-primary input-bordered'
-            value={product.title}
+            value={Data.cpu_id}
             onChange={(e) => {
-              setProduct({ ...product, title: e.target.value })
+              setData({ ...Data, cpu_id: e.target.value })
             }}
           />
         </div>
         <div className='form-control'>
           <label className='label'>
-            <span className='label-text'>Price</span>
+            <span className='label-text'>hardware_category_id</span>
           </label>
           <input
             type='text'
-            placeholder='Price'
+            placeholder='hardware_category_id'
             className='input input-primary input-bordered'
-            value={product.price}
+            value={Data.hardware_category_id}
             onChange={(e) => {
-              setProduct({ ...product, price: e.target.value })
+              setData({ ...Data, hardware_category_id: e.target.value })
             }}
           />
         </div>

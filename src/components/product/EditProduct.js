@@ -4,7 +4,12 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import fetcher from '@/app/fetcher'
+import useSWR from 'swr'
+
 export default function EditProduct({ productId }) {
+  const { data, error, mutate: refresh } = useSWR('products', fetcher)
+
   const id = 1
   const router = useRouter()
   const [product, setProduct] = useState({
@@ -12,13 +17,14 @@ export default function EditProduct({ productId }) {
     price: '',
   })
 
-  const saveProduct = async (e) => {
+  const saveProduct = (e) => {
+    router.push('/')
+
     e.preventDefault()
-    await axios.post('http://192.168.55.190:5000/products', {
+    axios.post('http://192.168.55.190:5000/products', {
       title: product.title,
       price: product.price,
     })
-    router.push('/')
   }
   useEffect(() => {
     getProductById()
@@ -32,10 +38,10 @@ export default function EditProduct({ productId }) {
   }
 
   return (
-    <div className='p-8 w-full md:w-1/2 mx-auto'>
+    <div className='mx-auto w-full p-8 md:w-1/2'>
       <p>{productId}</p>
       <Link href={'/'}>
-        <a className='btn btn-sm btn-secondary'>Kembali</a>
+        <a className='btn btn-sm btn-secondary'>Kessmbali</a>
       </Link>
       <form onSubmit={saveProduct}>
         <div className='form-control'>
@@ -46,7 +52,7 @@ export default function EditProduct({ productId }) {
             type='text'
             placeholder='Title'
             className='input input-primary input-bordered'
-            value={product.title}
+            value={data.product.title}
             onChange={(e) => {
               setProduct({ ...product, title: e.target.value })
             }}
@@ -60,13 +66,13 @@ export default function EditProduct({ productId }) {
             type='text'
             placeholder='Price'
             className='input input-primary input-bordered'
-            value={product.price}
+            value={data.product.price}
             onChange={(e) => {
               setProduct({ ...product, price: e.target.value })
             }}
           />
         </div>
-        <button className='mt-4 btn btn-primary'>Update</button>
+        <button className='btn btn-primary mt-4'>Update</button>
       </form>
     </div>
   )

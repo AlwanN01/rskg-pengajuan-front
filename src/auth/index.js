@@ -6,6 +6,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 export default function AuthCheck() {
+  const [display, setDisplay] = useState(false)
   const [name, setName] = useState('')
   // const [users, setUsers] = useState([])
   const [token, setToken] = useState('')
@@ -24,6 +25,7 @@ export default function AuthCheck() {
       const decoded = jwt_decode(response.data.accessToken)
       setName(decoded.name)
       setExpire(decoded.exp)
+      setDisplay(true)
     } catch (error) {
       console.log(error.response.status)
       if (error.response) {
@@ -51,6 +53,8 @@ export default function AuthCheck() {
       return Promise.reject(error)
     }
   )
+
+  return display
   // const GetUsers = async () => {
   //   const response = await axiosJWT.get('http://192.168.55.190:5000/users', {
   //     headers: {

@@ -1,55 +1,34 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react/jsx-key */
-import axios from 'axios'
 import React from 'react'
-import { useState, useEffect } from 'react'
+import NavMaster from 'src/layout/navbar/NavMaster'
+
+import axios from 'axios'
 import Link from 'next/link'
+import { memo, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import fetcher from '@/app/fetcher'
+import Url from 'src/config/Url'
 import { useTable } from 'react-table'
-import Table from '../table'
-function ProductList() {
-  const { data: dataFetch, error, mutate } = useSWR('http://192.168.55.190:5000/products', fetcher)
-  const history = useRouter()
+export default function Index() {
+  const router = useRouter()
+  const { master } = router.query
+  const { data: dataFetch, error, mutate } = useSWR(`${Url}/${master}`, fetcher)
   // useEffect(() => {
   //   mutate()
   // }, [mutate])
+
   console.log(dataFetch)
   const deleteProduct = async (id) => {
-    await axios.delete(`http://192.168.55.190:5000/products/${id}`)
+    await axios.delete(`${Url}/${master}/${id}`)
     // refresh()
     mutate()
   }
-  const Logout = async () => {
-    try {
-      await axios.delete('http://192.168.55.190:5000/logout')
-      history.push('/login')
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  const data = React.useMemo(() => dataFetch?.products, [dataFetch])
-  let dataCol = dataFetch && Object?.keys(dataFetch?.products[0])
-  const exclude = new Set(['id', 'createdAt', 'updatedAt']) //exclude data yang dioutput
-  for (let i = 0; i < dataCol?.length; i++) {
-    if (exclude.has(dataCol[i])) {
-      dataCol.splice(i, 1)
-      i--
-    }
-  }
-  dataCol = dataCol?.map((data) => {
-    return { Header: data.replace(/_/g, ' ').toUpperCase(), accessor: data }
-  })
-  const columns = React.useMemo(() => dataCol, [dataCol])
-
-  console.log(data, columns)
   if (!dataFetch) return null
 
   //membuat array th untuk table dari datafetch object key
 
-  const thead = Object.keys(dataFetch?.products[0])
+  const thead = Object.keys(dataFetch?.[master][0])
   const tSet = new Set(['id', 'createdAt', 'updatedAt']) //exclude data yang dioutput
   for (let i = 0; i < thead.length; i++) {
     if (tSet.has(thead[i])) {
@@ -60,11 +39,8 @@ function ProductList() {
 
   return (
     <div className='container mx-auto w-full p-2'>
-      <button onClick={Logout} className='btn btn-success'>
-        Log Out
-      </button>
       <Link href={'/productAdd'}>
-        <a className='btn btn-primary my-4'> Add Product </a>
+        <a className='btn btn-primary my-4'> Add Data </a>
       </Link>
       <p>{dataFetch?.message}...</p>
       <div className='overflow-x-auto'>
@@ -81,7 +57,7 @@ function ProductList() {
             </tr>
           </thead>
           <tbody>
-            {dataFetch?.products.map(
+            {dataFetch?.[master].map(
               (product, index) =>
                 !product.id == 0 && (
                   <tr key={index} className='hover:bg-base-200 group'>
@@ -112,8 +88,14 @@ function ProductList() {
           </tbody>
         </table>
       </div>
-      <Table columns={columns} data={data} />
     </div>
   )
 }
-export default ProductList
+
+Index.getLayout = function getLayout(page) {
+  return (
+    <>
+      <NavMaster>{page}</NavMaster>
+    </>
+  )
+}
