@@ -1,3 +1,4 @@
+const { '[data-theme=dark]': darkTheme } = require('daisyui/colors/themes')
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}', './node_modules/@themesberg/flowbite/**/*.js'],
   theme: {
@@ -36,28 +37,19 @@ module.exports = {
       },
       {
         dark: {
-          // custom theme
+          ...darkTheme,
           primary: '#ea5234',
           'primary-focus': '#d43616',
           'primary-content': '#ffffff',
           secondary: '#f000b8',
           'secondary-focus': '#bd0091',
           'secondary-content': '#ffffff',
-          accent: '#37cdbe',
-          'accent-focus': '#2aa79b',
-          'accent-content': '#ffffff',
           neutral: '#2A2E37',
-          'neutral-focus': '#16181D',
+          'neutral-focus': '#2A2E37',
           'neutral-content': '#ffffff',
-          'base-100': '#3D4451',
-          'base-200': '#2A2E37',
-          'base-300': '#16181D',
-          'base-content': '#EBECF0',
+
           // other colors
-          info: '#66C7FF',
           success: '#009485',
-          warning: '#E2D562',
-          error: '#FF6F6F',
         },
       },
 

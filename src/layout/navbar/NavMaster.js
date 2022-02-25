@@ -11,7 +11,7 @@ export default function NavMaster({ children }) {
   const [active, setActive] = useState()
   const router = useRouter()
   const { master } = router.query
-  const path = ['cpu', 'mobo']
+  const path = ['cpu', 'cpu_user', 'pegawai']
   const onClick = (data, index) => {
     router.push(`/master/${data}`)
     setActive(index)

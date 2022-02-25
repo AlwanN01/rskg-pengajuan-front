@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 export default function Navbar() {
   const router = useRouter()
   return (
@@ -15,6 +16,9 @@ export default function Navbar() {
           <a className='btn btn-ghost btn-sm rounded-btn'>Portfolio</a>
           <a className='btn btn-ghost btn-sm rounded-btn'>About</a>
           <a className='btn btn-ghost btn-sm rounded-btn'>Contact</a>
+          <Link href={'/tes'}>
+            <a className='btn btn-ghost btn-sm rounded-btn'>tes</a>
+          </Link>
         </div>
       </div>
       <div className='flex-none'>

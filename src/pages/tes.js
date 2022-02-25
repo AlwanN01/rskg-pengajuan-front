@@ -1,106 +1,55 @@
-/* eslint-disable react/jsx-key */
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import axios from 'axios'
-import fetcher from '@/app/fetcher'
-import { useTable } from 'react-table'
 import React from 'react'
-export default function Tes({ fallbackData }) {
-  const { data: dataFetch, error, mutate } = useSWR('http://192.168.55.190:5000/products', fetcher, { fallbackData })
-  const history = useRouter()
-
-  const data = React.useMemo(() => dataFetch?.products, [dataFetch])
-  console.log(data)
-  const dataCol = dataFetch && Object?.keys(dataFetch?.products[0])
-  const exclude = new Set(['id', 'createdAt', 'updatedAt']) //exclude data yang dioutput
-  for (let i = 0; i < dataCol.length; i++) {
-    if (exclude.has(dataCol[i])) {
-      dataCol.splice(i, 1)
-      i--
+import { useState, useEffect, useRef, createRef, useCallback } from 'react'
+import $ from 'jQuery'
+import useTitle from 'src/utils/useTitle'
+export default function Tes() {
+  const [count, setCount] = useState(0)
+  const [{ one, two }, setObj] = useState({ one: 1, two: 2 })
+  useEffect(() => {
+    document.title = `You clicked ${count} times`
+    $('p').on('click', function () {
+      $(this).toggleClass('bg-sky-400')
+    })
+    return () => {
+      document.title = 'Local Host'
     }
-  }
-  const cols = dataCol.map((data) => {
-    return { Header: data.replace(/_/g, ' ').toUpperCase(), accessor: data }
-  })
+  }, [count])
+  const [document_title, setDoucmentTitle] = useTitle('Home page')
+  const ref = useRef()
+  const checkboxref = createRef()
 
-  console.log(cols)
-  const columns = React.useMemo(
-    () => cols,
-
-    [cols]
+  const handleOnClick = useCallback(
+    (e) => {
+      console.log(e)
+      const node = checkboxref.current
+      if (node) {
+        node.focus()
+        node.select()
+      }
+    },
+    [checkboxref]
   )
-
-  const {
-    getTableProps,
-
-    getTableBodyProps,
-
-    headerGroups,
-
-    rows,
-
-    prepareRow,
-  } = useTable({ columns, data })
-
+  console.log(two)
   return (
-    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
-                style={{
-                  borderBottom: 'solid 3px red',
+    <div>
+      <input type='checkbox' id='check' className='peer hidden' />
+      <div className='relative h-[50vh] w-[50vh] bg-gray-200 transition-all peer-checked:w-[20vh] peer-checked:bg-blue-500'>
+        <label htmlFor='check' className='btn btn-ghost absolute right-0 text-black'>
+          {' '}
+          toggle{' '}
+        </label>
+        <p className='text-black'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur, aliquam.</p>
+      </div>
 
-                  background: 'aliceblue',
-
-                  color: 'black',
-
-                  fontWeight: 'bold',
-                }}>
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row)
-
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <td
-                    {...cell.getCellProps()}
-                    style={{
-                      padding: '10px',
-
-                      border: 'solid 1px gray',
-
-                      background: 'papayawhip',
-                    }}>
-                    {cell.render('Cell')}
-                  </td>
-                )
-              })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+      {/* <input type='checkbox' ref={checkboxref} />
+      <p className='tes bro'>If you click on me, I will disappear.</p>
+      <p>Click me away!</p>
+      <p>Click me too!</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+      <br />
+      <button onClick={() => setDoucmentTitle('About page')}>Change document title</button>
+      <br />
+      <button onClick={handleOnClick}>cek ref</button> */}
+    </div>
   )
-}
-
-export async function getServerSideProps() {
-  const response = await axios.get('http://192.168.55.190:5000/products')
-  return {
-    props: {
-      fallbackData: response.data,
-    }, // will be passed to the page component as props
-  }
 }

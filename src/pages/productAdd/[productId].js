@@ -51,7 +51,7 @@ export default function ProductEdit() {
             type='text'
             placeholder='Title'
             className='input input-primary input-bordered'
-            value={product?.title}
+            value={product?.title || ''}
             onChange={(e) => {
               setProduct({ ...product, title: e.target.value })
             }}
@@ -65,7 +65,7 @@ export default function ProductEdit() {
             type='text'
             placeholder='Price'
             className='input input-primary input-bordered'
-            value={product?.price}
+            value={product?.price || ''}
             onChange={(e) => {
               setProduct({ ...product, price: e.target.value })
             }}

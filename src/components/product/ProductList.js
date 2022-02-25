@@ -15,7 +15,6 @@ function ProductList() {
   // useEffect(() => {
   //   mutate()
   // }, [mutate])
-  console.log(dataFetch)
   const deleteProduct = async (id) => {
     await axios.delete(`http://192.168.55.190:5000/products/${id}`)
     // refresh()
@@ -40,11 +39,43 @@ function ProductList() {
     }
   }
   dataCol = dataCol?.map((data) => {
-    return { Header: data.replace(/_/g, ' ').toUpperCase(), accessor: data }
+    return { className: 'w-max break-words py-2 px-4', maxWidth: 150, minWidth: 100, Header: data.replace(/_/g, ' ').toUpperCase(), accessor: data }
   })
+  const actionCol = {
+    Header: 'Action',
+    accessor: 'id',
+    Cell: ({ cell }) => (
+      <>
+        <Link href={`/productAdd/${cell.row.values.id}`}>
+          <a className='btn btn-sm btn-success w-16'>edit</a>
+        </Link>
+        <button
+          className='btn btn-sm btn-error w-16'
+          onClick={() => {
+            deleteProduct(cell.row.values.id)
+          }}>
+          Delete
+        </button>
+      </>
+    ),
+    classNameHead: 'bg-base-200 sticky left-8 break-words p-2',
+    className: 'bg-base-100 group-hover:bg-gray-700 sticky left-8 break-words p-2',
+    maxWidth: 200,
+    minWidth: 100,
+  }
+  const number = {
+    Header: 'NO',
+    filterable: false,
+    Cell: ({ row }) => <>{row.index}</>,
+    classNameHead: 'bg-base-200 sticky left-0 break-words p-2',
+    className: 'bg-base-100 group-hover:bg-gray-700 sticky left-0 break-words p-2',
+    maxWidth: 200,
+    minWidth: 0,
+  }
+  dataCol?.unshift(actionCol)
+  dataCol?.unshift(number)
   const columns = React.useMemo(() => dataCol, [dataCol])
 
-  console.log(data, columns)
   if (!dataFetch) return null
 
   //membuat array th untuk table dari datafetch object key
@@ -60,7 +91,8 @@ function ProductList() {
 
   return (
     <div className='container mx-auto w-full p-2'>
-      <button onClick={Logout} className='btn btn-success'>
+      <p>tes</p>
+      <button onClick={Logout} className='btn btn-success text-black dark:text-white'>
         Log Out
       </button>
       <Link href={'/productAdd'}>
@@ -68,6 +100,9 @@ function ProductList() {
       </Link>
       <p>{dataFetch?.message}...</p>
       <div className='overflow-x-auto'>
+        <Table columns={columns} data={data} />
+      </div>
+      {/* <div className='overflow-x-auto'>
         <table className='w-auto table-fixed'>
           <thead className='bg-base-200'>
             <tr>
@@ -111,8 +146,7 @@ function ProductList() {
             )}
           </tbody>
         </table>
-      </div>
-      <Table columns={columns} data={data} />
+      </div> */}
     </div>
   )
 }

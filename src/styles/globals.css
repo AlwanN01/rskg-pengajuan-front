@@ -5,8 +5,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -16,4 +15,39 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+@layer components {
+  /* .my-react-select-container {
+  } */
+  .my-react-select-container .my-react-select__control {
+    @apply bg-base-100 border-primary hover:border-primary-focus rounded-md border;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply text-primary border-primary hover:border-primary ring-primary ring-offset-base-100 shadow-none ring-2 ring-offset-2;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-base-100 border-base-200 border-2;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply bg-base-100 hover:bg-base-200 text-base-content;
+  }
+  /* .my-react-select-container .my-react-select__option--is-focused {
+    @apply text-primary;
+  } */
+
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply bg-base-100;
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-base-content;
+  }
+  .my-react-select-container .my-react-select__placeholder {
+    @apply text-slate-400;
+  }
 }

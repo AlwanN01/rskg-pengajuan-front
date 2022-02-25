@@ -6,11 +6,16 @@ import { useRouter } from 'next/router'
 import { mutate } from 'swr'
 export default function AddProduct() {
   const router = useRouter()
-  const [product, setProduct] = useState({
-    title: '',
-    price: '',
-  })
+  const [product, setProduct] = useState()
 
+  const setData = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+    setProduct({
+      ...product,
+      [name]: value,
+    })
+  }
   const saveProduct = (e) => {
     e.preventDefault()
     axios
@@ -25,9 +30,9 @@ export default function AddProduct() {
 
   return (
     <div className='mx-auto w-full p-8 md:w-1/2'>
-      <Link href={'/'}>
-        <a className='btn btn-sm btn-secondary'>Kembali</a>
-      </Link>
+      <a className='btn btn-sm btn-secondary' onClick={() => router.push(`/`)}>
+        Kembali
+      </a>
       <form onSubmit={saveProduct}>
         <div className='form-control'>
           <label className='label'>
@@ -36,10 +41,11 @@ export default function AddProduct() {
           <input
             type='text'
             placeholder='Title'
+            name='title'
             className='input input-primary input-bordered'
-            value={product.title}
+            value={product?.title || ''}
             onChange={(e) => {
-              setProduct({ ...product, title: e.target.value })
+              setData(e)
             }}
           />
         </div>
@@ -50,10 +56,11 @@ export default function AddProduct() {
           <input
             type='text'
             placeholder='Price'
+            name='price'
             className='input input-primary input-bordered'
-            value={product.price}
+            value={product?.price || ''}
             onChange={(e) => {
-              setProduct({ ...product, price: e.target.value })
+              setData(e)
             }}
           />
         </div>
