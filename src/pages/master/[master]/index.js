@@ -3,7 +3,7 @@ import NavMaster from 'src/layout/navbar/NavMaster'
 
 import axios from 'axios'
 import Link from 'next/link'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import fetcher from '@/app/fetcher'
@@ -12,20 +12,18 @@ import { useTable } from 'react-table'
 import Table from '@/components/table'
 export default function Index() {
   const router = useRouter()
-  console.log(router.query)
   const { master } = router.query
   const { data: dataFetch, error, mutate } = useSWR(`${Url}/${master}`, fetcher)
-  // useEffect(() => {
-  //   mutate()
-  // }, [mutate])
+  useEffect(() => {
+    mutate()
+  }, [mutate])
 
-  console.log(dataFetch)
   const deleteProduct = async (id) => {
     await axios.delete(`${Url}/${master}/${id}`)
     // refresh()
     mutate()
   }
-  const data = React.useMemo(() => dataFetch?.[master], [dataFetch, master])
+  const data = dataFetch?.[master]
   let dataCol = dataFetch && Object?.keys(dataFetch?.[master][0])
   const exclude = new Set(['id', 'createdAt', 'updatedAt']) //exclude data yang dioutput
   for (let i = 0; i < dataCol?.length; i++) {
@@ -70,7 +68,7 @@ export default function Index() {
   }
   dataCol?.unshift(actionCol)
   dataCol?.unshift(number)
-  const columns = React.useMemo(() => dataCol, [dataCol])
+  const columns = dataCol
 
   if (!dataFetch) return null
 

@@ -25,7 +25,7 @@ export default function Index() {
   const [saveImage, setSaveImage] = useState(null)
 
   const dataKey = dataFetch && Object?.keys(dataFetch?.pegawai[0])
-  const exclude = new Set(['id', 'createdAt', 'updatedAt']) //exclude data yang dioutput
+  const exclude = new Set(['id', 'createdAt', 'updatedAt', 'provinsi', 'kab_kota', 'kecamatan', 'kel_desa', 'foto_pegawai']) //exclude data yang dioutput
   for (let i = 0; i < dataKey?.length; i++) {
     if (exclude.has(dataKey[i])) {
       dataKey.splice(i, 1)
@@ -76,6 +76,7 @@ export default function Index() {
     setValueSelectKec(null)
     setValueSelectKel(null)
     setDataKelByID([])
+    console.log('foto', data.foto_pegawai)
   }
   const onChangeKec = async (e, input) => {
     const { name } = input
@@ -92,7 +93,7 @@ export default function Index() {
     setDataKelByID(response)
     setValueSelectKel(null)
   }
-  const onChangeKel = async (e, input) => {
+  const onChangeKel = (e, input) => {
     const { name } = input
     setData({
       ...data,
@@ -100,17 +101,32 @@ export default function Index() {
     })
     setValueSelectKel(e)
   }
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    axios.post(`${Url}/pegawai`, data).then(mutate())
+    const formData = new FormData()
+    let newData = data
+    formData.append('photo', saveImage)
+    await axios.post(`${Url}/api/upload`, formData).then((res) => {
+      setData({
+        ...data,
+        foto_pegawai: res.data.image,
+      })
+      newData = { ...newData, foto_pegawai: res.data.image }
+    })
+
+    console.log('newData', newData)
+
+    axios.post(`${Url}/karyawan`, newData).then(mutate())
+
     router.push(`/master/pegawai`)
   }
 
   const onUpload = (e) => {
-    let uploaded = e.target.files[0]
+    const uploaded = e.target.files[0]
     setImage(URL.createObjectURL(uploaded))
+    setSaveImage(uploaded)
   }
-  // console.log(data)
+  console.log(data)
   if (!dataFetch) return null
   const options = dataWilayah?.wilayah
   options = options?.map((data) => {
@@ -151,7 +167,7 @@ export default function Index() {
         <Select
           className='my-react-select-container'
           classNamePrefix='my-react-select'
-          name='wilayah'
+          name='provinsi'
           onChange={(e, input) => onChangeWilayah(e, input)}
           options={options}
         />
@@ -190,7 +206,7 @@ export default function Index() {
           value={valueSelectKel}
           className='my-react-select-container'
           classNamePrefix='my-react-select'
-          name='kelurahan'
+          name='kel_desa'
           onChange={(e, input) => onChangeKel(e, input)}
           options={dataKelByID}
         />

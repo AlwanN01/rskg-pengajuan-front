@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react'
-import { useTable, usePagination } from 'react-table'
+import React, { useState, useMemo } from 'react'
+import { useTable, useSortBy, usePagination, useGlobalFilter } from 'react-table'
+import GlobalFilter from './GlobalFilter'
 
 export default function Table({ columns, data }) {
   const {
@@ -20,12 +21,19 @@ export default function Table({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
-  } = useTable({ columns, data, initialState: { pageSize: 6 } }, usePagination)
+    state: { pageIndex, pageSize, globalFilter },
+    setGlobalFilter,
+  } = useTable(
+    { columns: useMemo(() => columns, [columns]), data: useMemo(() => data, [data]), initialState: { pageSize: 6 } },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  )
 
   return (
     <>
-      <div className='sticky left-0'>
+      <div className='sticky left-0 select-none'>
+        <GlobalFilter filter={globalFilter} SetFilter={setGlobalFilter} />
         <button className='btn btn-sm btn-active disabled:btn-disabled' onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
         </button>{' '}
@@ -76,12 +84,16 @@ export default function Table({ columns, data }) {
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
-                  className='bg-base-200 break-words p-2'
-                  {...column.getHeaderProps({
+                  className='bg-base-200 relative select-none break-words p-2'
+                  {...column.getHeaderProps(column.getSortByToggleProps(), {
                     className: column.classNameHead,
                     style: { minWidth: column?.minWidth, maxWidth: column?.maxWidth },
                   })}>
                   {column.render('Header')}
+                  <span
+                    className={`absolute ${
+                      column.isSorted ? (column.isSortedDesc ? ' left-0 bottom-0 w-full border' : ' left-0 top-0 w-full border') : ''
+                    } border-green-300`}></span>
                 </th>
               ))}
             </tr>

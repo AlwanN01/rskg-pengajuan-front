@@ -19,6 +19,9 @@ export default function Navbar() {
           <Link href={'/tes'}>
             <a className='btn btn-ghost btn-sm rounded-btn'>tes</a>
           </Link>
+          <Link href={'/tes2'}>
+            <a className='btn btn-ghost btn-sm rounded-btn'>tes2</a>
+          </Link>
         </div>
       </div>
       <div className='flex-none'>

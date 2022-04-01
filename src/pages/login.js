@@ -27,7 +27,7 @@ export default function Login() {
 
   return (
     <div className='flex min-h-screen items-center justify-center'>
-      <div className='bg-base-200 w-1/3 rounded-md p-5 shadow-lg'>
+      <div className='bg-base-200 w-full rounded-md p-5 shadow-lg md:w-1/3'>
         <h1 className='text-primary text-lg font-bold'>INVENTARIS IT</h1>
         <h1 className='text-primary text-lg font-bold'>{msg}</h1>
         <hr className='border-base-100 my-5' />

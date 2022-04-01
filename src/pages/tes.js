@@ -2,7 +2,19 @@ import React from 'react'
 import { useState, useEffect, useRef, createRef, useCallback } from 'react'
 import $ from 'jQuery'
 import useTitle from 'src/utils/useTitle'
+import ping from 'ping'
+
 export default function Tes() {
+  // const host2 = ['192.168.55.60', 'www.google.com', '192.168.55.193']
+  // const [hostInfo, setHostInfo] = useState()
+  // host2.forEach(function (host) {
+  //   setInterval(function () {
+  //     ping.sys.probe(host, function (active) {
+  //       const info = active ? 'IP ' + host + ' = Active' : 'IP ' + host + ' = Non-Active'
+  //       console.log(info)
+  //     })
+  //   }, 3000)
+  // })
   const [count, setCount] = useState(0)
   const [{ one, two }, setObj] = useState({ one: 1, two: 2 })
   useEffect(() => {
@@ -14,6 +26,7 @@ export default function Tes() {
       document.title = 'Local Host'
     }
   }, [count])
+
   const [document_title, setDoucmentTitle] = useTitle('Home page')
   const ref = useRef()
   const checkboxref = createRef()
@@ -29,7 +42,6 @@ export default function Tes() {
     },
     [checkboxref]
   )
-  console.log(two)
   return (
     <div>
       <input type='checkbox' id='check' className='peer hidden' />
