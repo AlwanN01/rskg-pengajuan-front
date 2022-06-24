@@ -8,21 +8,21 @@ export default function AddProduct() {
   const router = useRouter()
   const [product, setProduct] = useState()
 
-  const setData = (e) => {
+  const setData = e => {
     const name = e.target.name
     const value = e.target.value
     setProduct({
       ...product,
-      [name]: value,
+      [name]: value
     })
   }
-  const saveProduct = (e) => {
+  const saveProduct = e => {
     e.preventDefault()
     axios
-      .post('http://192.168.55.190:5000/products', {
+      .post('http://192.168.4.29:5000/products', {
         title: product.title,
         price: product.price,
-        type: 'non organik',
+        type: 'non organik'
       })
       .then(mutate())
     router.push('/')
@@ -44,7 +44,7 @@ export default function AddProduct() {
             name='title'
             className='input input-primary input-bordered'
             value={product?.title || ''}
-            onChange={(e) => {
+            onChange={e => {
               setData(e)
             }}
           />
@@ -59,7 +59,7 @@ export default function AddProduct() {
             name='price'
             className='input input-primary input-bordered'
             value={product?.price || ''}
-            onChange={(e) => {
+            onChange={e => {
               setData(e)
             }}
           />

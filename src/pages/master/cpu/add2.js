@@ -7,12 +7,12 @@ export default function CpuAdd() {
   const router = useRouter()
   const [Data, setData] = useState({})
 
-  const saveData = (e) => {
+  const saveData = e => {
     e.preventDefault()
-    axios.post('http://192.168.55.190:5000/cpu', {
+    axios.post('http://192.168.4.29:5000/cpu', {
       cpu_id: Data.cpu_id,
       hardware_category_id: Data.hardware_category_id,
-      type: 'non organik',
+      type: 'non organik'
     })
     router.push('/master/cpu')
   }
@@ -32,7 +32,7 @@ export default function CpuAdd() {
             placeholder='Title'
             className='input input-primary input-bordered'
             value={Data.cpu_id}
-            onChange={(e) => {
+            onChange={e => {
               setData({ ...Data, cpu_id: e.target.value })
             }}
           />
@@ -46,7 +46,7 @@ export default function CpuAdd() {
             placeholder='hardware_category_id'
             className='input input-primary input-bordered'
             value={Data.hardware_category_id}
-            onChange={(e) => {
+            onChange={e => {
               setData({ ...Data, hardware_category_id: e.target.value })
             }}
           />

@@ -14,26 +14,26 @@ export default function EditProduct({ productId }) {
   const router = useRouter()
   const [product, setProduct] = useState({
     title: '',
-    price: '',
+    price: ''
   })
 
-  const saveProduct = (e) => {
+  const saveProduct = e => {
     router.push('/')
 
     e.preventDefault()
-    axios.post('http://192.168.55.190:5000/products', {
+    axios.post('http://192.168.4.29:5000/products', {
       title: product.title,
-      price: product.price,
+      price: product.price
     })
   }
   useEffect(() => {
     getProductById()
   }, [])
   const getProductById = async () => {
-    const response = await axios.get(`http://192.168.55.190:5000/products/${id}`)
+    const response = await axios.get(`http://192.168.4.29:5000/products/${id}`)
     setProduct({
       title: response.data.title,
-      price: response.data.price,
+      price: response.data.price
     })
   }
 
@@ -53,7 +53,7 @@ export default function EditProduct({ productId }) {
             placeholder='Title'
             className='input input-primary input-bordered'
             value={data.product.title}
-            onChange={(e) => {
+            onChange={e => {
               setProduct({ ...product, title: e.target.value })
             }}
           />
@@ -67,7 +67,7 @@ export default function EditProduct({ productId }) {
             placeholder='Price'
             className='input input-primary input-bordered'
             value={data.product.price}
-            onChange={(e) => {
+            onChange={e => {
               setProduct({ ...product, price: e.target.value })
             }}
           />

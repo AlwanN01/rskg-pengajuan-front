@@ -12,12 +12,12 @@ export default function Index({ data }) {
   }, [])
 
   const getData = async () => {
-    const response = await axios.get('http://192.168.55.190:5000/cpu')
+    const response = await axios.get('http://192.168.4.29:5000/cpu')
     setDataList(response.data.cpus)
     setMessage(response.data.message)
   }
-  const deleteData = async (id) => {
-    await axios.delete(`http://192.168.55.190:5000/cpu/${id}`)
+  const deleteData = async id => {
+    await axios.delete(`http://192.168.4.29:5000/cpu/${id}`)
     getData()
   }
   return (
@@ -72,10 +72,10 @@ Index.getLayout = function getLayout(page) {
 }
 
 export async function getServerSideProps() {
-  const response = await axios.get('http://192.168.55.190:5000/cpu')
+  const response = await axios.get('http://192.168.4.29:5000/cpu')
   return {
     props: {
-      data: response.data.cpus,
-    }, // will be passed to the page component as props
+      data: response.data.cpus
+    } // will be passed to the page component as props
   }
 }

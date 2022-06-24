@@ -10,19 +10,19 @@ import fetcher from '@/app/fetcher'
 import { useTable } from 'react-table'
 import Table from '../table'
 function ProductList() {
-  const { data: dataFetch, error, mutate } = useSWR('http://192.168.55.190:5000/products', fetcher)
+  const { data: dataFetch, error, mutate } = useSWR('http://192.168.4.29:5000/products', fetcher)
   const history = useRouter()
   // useEffect(() => {
   //   mutate()
   // }, [mutate])
-  const deleteProduct = async (id) => {
-    await axios.delete(`http://192.168.55.190:5000/products/${id}`)
+  const deleteProduct = async id => {
+    await axios.delete(`http://192.168.4.29:5000/products/${id}`)
     // refresh()
     mutate()
   }
   const Logout = async () => {
     try {
-      await axios.delete('http://192.168.55.190:5000/logout')
+      await axios.delete('http://192.168.4.29:5000/logout')
       history.push('/login')
     } catch (error) {
       console.log(error)
@@ -38,7 +38,7 @@ function ProductList() {
       i--
     }
   }
-  dataCol = dataCol?.map((data) => {
+  dataCol = dataCol?.map(data => {
     return { className: 'w-max break-words py-2 px-4', maxWidth: 150, minWidth: 100, Header: data.replace(/_/g, ' ').toUpperCase(), accessor: data }
   })
   const actionCol = {
@@ -61,7 +61,7 @@ function ProductList() {
     classNameHead: 'bg-base-200 sticky left-8 break-words p-2',
     className: 'bg-base-100 group-hover:bg-gray-700 sticky left-8 break-words p-2',
     maxWidth: 200,
-    minWidth: 100,
+    minWidth: 100
   }
   const number = {
     Header: 'NO',
@@ -70,7 +70,7 @@ function ProductList() {
     classNameHead: 'bg-base-200 sticky left-0 break-words p-2',
     className: 'bg-base-100 group-hover:bg-gray-700 sticky left-0 break-words p-2',
     maxWidth: 200,
-    minWidth: 0,
+    minWidth: 0
   }
   dataCol?.unshift(actionCol)
   dataCol?.unshift(number)

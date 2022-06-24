@@ -25,8 +25,8 @@ export default function NavMaster({ children }) {
             onClick={() => router.push(`/`)}
             onMouseEnter={() =>
               mutate(
-                'http://192.168.55.190:5000/products',
-                fetch('http://192.168.55.190:5000/products').then((res) => res.json())
+                'http://192.168.4.29:5000/products',
+                fetch('http://192.168.4.29:5000/products').then(res => res.json())
               )
             }>
             HOME
@@ -42,7 +42,7 @@ export default function NavMaster({ children }) {
                 onMouseEnter={() =>
                   mutate(
                     `${Url}/${data}`,
-                    fetch(`${Url}/${data}`).then((res) => res.json())
+                    fetch(`${Url}/${data}`).then(res => res.json())
                   )
                 }>
                 {data.replace(/_/g, ' ').toUpperCase()}

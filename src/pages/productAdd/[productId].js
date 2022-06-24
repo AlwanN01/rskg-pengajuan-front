@@ -10,15 +10,15 @@ import fetcher from '@/app/fetcher'
 export default function ProductEdit() {
   const router = useRouter()
   const { productId } = router.query
-  const { data, error, mutate: refresh } = useSWR(`http://192.168.55.190:5000/products/${productId}`, fetcher)
+  const { data, error, mutate: refresh } = useSWR(`http://192.168.4.29:5000/products/${productId}`, fetcher)
 
   const [product, setProduct] = useState(data)
 
-  const saveProduct = (e) => {
+  const saveProduct = e => {
     e.preventDefault()
-    axios.patch(`http://192.168.55.190:5000/products/${productId}`, {
+    axios.patch(`http://192.168.4.29:5000/products/${productId}`, {
       title: product.title,
-      price: product.price,
+      price: product.price
     })
     router.push('/')
   }
@@ -27,10 +27,10 @@ export default function ProductEdit() {
       return
     }
     const getProductById = async () => {
-      const response = await axios.get(`http://192.168.55.190:5000/products/${productId}`)
+      const response = await axios.get(`http://192.168.4.29:5000/products/${productId}`)
       setProduct({
         title: response.data.title ? response.data.title : '',
-        price: response.data.price ? response.data.price : '',
+        price: response.data.price ? response.data.price : ''
       })
     }
     getProductById()
@@ -52,7 +52,7 @@ export default function ProductEdit() {
             placeholder='Title'
             className='input input-primary input-bordered'
             value={product?.title || ''}
-            onChange={(e) => {
+            onChange={e => {
               setProduct({ ...product, title: e.target.value })
             }}
           />
@@ -66,7 +66,7 @@ export default function ProductEdit() {
             placeholder='Price'
             className='input input-primary input-bordered'
             value={product?.price || ''}
-            onChange={(e) => {
+            onChange={e => {
               setProduct({ ...product, price: e.target.value })
             }}
           />

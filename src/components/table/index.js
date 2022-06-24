@@ -22,7 +22,7 @@ export default function Table({ columns, data }) {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize, globalFilter },
-    setGlobalFilter,
+    setGlobalFilter
   } = useTable(
     { columns: useMemo(() => columns, [columns]), data: useMemo(() => data, [data]), initialState: { pageSize: 6 } },
     useGlobalFilter,
@@ -57,7 +57,7 @@ export default function Table({ columns, data }) {
           <input
             type='number'
             defaultValue={pageIndex + 1}
-            onChange={(e) => {
+            onChange={e => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0
               gotoPage(page)
             }}
@@ -68,10 +68,10 @@ export default function Table({ columns, data }) {
         <select
           value={pageSize}
           className='select select-sm select-bordered'
-          onChange={(e) => {
+          onChange={e => {
             setPageSize(Number(e.target.value))
           }}>
-          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+          {[5, 10, 20, 30, 40, 50].map(pageSize => (
             <option key={pageSize} value={pageSize + 1}>
               Show {pageSize}
             </option>
@@ -80,14 +80,14 @@ export default function Table({ columns, data }) {
       </div>
       <table className='w-max table-fixed overflow-hidden rounded-tl-lg rounded-tr-lg' {...getTableProps()}>
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
+              {headerGroup.headers.map(column => (
                 <th
                   className='bg-base-200 relative select-none break-words p-2'
                   {...column.getHeaderProps(column.getSortByToggleProps(), {
                     className: column.classNameHead,
-                    style: { minWidth: column?.minWidth, maxWidth: column?.maxWidth },
+                    style: { minWidth: column?.minWidth, maxWidth: column?.maxWidth }
                   })}>
                   {column.render('Header')}
                   <span
@@ -106,18 +106,18 @@ export default function Table({ columns, data }) {
               prepareRow(row)
               if (!row.original.id == 0)
                 return (
-                  <tr className='group hover:bg-sky-400 hover:dark:bg-gray-700' {...row.getRowProps()}>
+                  <tr className='group hover:bg-gray-700' {...row.getRowProps()}>
                     {/* <td className='sticky left-0 break-words p-2'>{index}</td> */}
                     {
                       // loop over the rows cells
-                      row.cells.map((cell) => (
+                      row.cells.map(cell => (
                         <td
                           {...cell.getCellProps({
                             className: cell.column.className,
                             style: {
                               minWidth: cell.column.minWidth,
-                              maxWidth: cell.column.maxWidth,
-                            },
+                              maxWidth: cell.column.maxWidth
+                            }
                           })}>
                           {cell.render('Cell')}
                         </td>

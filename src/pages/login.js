@@ -46,13 +46,7 @@ export default function Login() {
               <input type='text' className='input input-primary w-3/4' value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
-          <Button
-            className={'mt-5 w-full'}
-            onClick={() => {
-              console.log('Hello')
-            }}>
-            LOGIN
-          </Button>
+          <Button className={'mt-5 w-full'}>LOGIN</Button>
         </form>
       </div>
     </div>
